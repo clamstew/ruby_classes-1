@@ -1,13 +1,3 @@
-# properties @position @gas_amount
-
-# .setup -- sets position to 0 and 10 gallons
-
-# drive method -- parameters: how many miles -- returns new position and gas_amount
-
-# car fillup method -- prints out how much gas costs
-
-
-
 class Car
   require 'money'
 
@@ -61,20 +51,3 @@ class Car
   		
   end
 end
-
-
-=begin
-	
-if 10 - 10/20 <= 10
-if 9.5 <= 10
-
-if 10 - 20/20 <= 10
-if 9 <= 10
-
-
-
-if 10 - 190/20.0 <= 10
-if 10 - 9.5 <= 10
-if .5 <= 10
-	
-=end
