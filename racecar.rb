@@ -7,7 +7,7 @@ class RaceTrack
     @track_name = name
     @total_race_time = 0
     @race_started = false
-    @betting_odds
+    # @betting_odds
     @attendees = []
     puts "Welcome to #{@track_name}! Are you ready to race?"
   end
@@ -23,7 +23,7 @@ class RaceTrack
 
   def start_race
   	@race_started = true
-    @betting_odds = rand(0.0..1.0)
+    # @betting_odds = rand(0.0..1.0)
   	puts "-------- THE RACE HAS STARTED! --------"
     puts "People in attendance are: "
     @attendees.each do |person|
@@ -38,12 +38,13 @@ class RaceTrack
       puts "#{car.name} has traveled #{car.total_distance} miles (going at a speed of #{car.speed})"
       car.speed = car.speed + rand(0..20)
     end
-    puts "========= The race started and has been advanced to #{@total_race_time} hour. The current betting odds are #{@betting_odds}. ========="
+    puts "========= The race started and has been advanced to #{@total_race_time} hour. ========="
+    calculate_each_user_total_for_one_hour
   end
 
   def add_hour_to_race
   	@total_race_time = @total_race_time + 1
-    @betting_odds = rand(0.0..1.0) # can change this to a function that changes the odds depending who is first by name or somerhing
+    # @betting_odds = rand(0.0..1.0) # can change this to a function that changes the odds depending who is first by name or somerhing
   	if @total_race_time < 5
   	  @racecars.each do |car|
   	    current_distance = car.speed
@@ -51,7 +52,7 @@ class RaceTrack
   	    puts "#{car.name} has traveled #{car.total_distance} miles (going at a speed of #{car.speed})"
   	    car.speed = car.speed + rand(0..20)
   	  end
-  	  puts "========= The race has been going on for #{@total_race_time} hours. The current betting odds are #{@betting_odds}. ========="
+  	  puts "========= The race has been going on for #{@total_race_time} hours. ========="
     elsif @total_race_time == 5
       puts "========= The race has reached 5 hours and has ended.  Here are the standings: ========="
       @racecars.each do |car|
@@ -61,15 +62,15 @@ class RaceTrack
       @race_started = false
       self.print_places
     end
-    calculate_each_user_total_for_one_hour(@betting_odds)
+    calculate_each_user_total_for_one_hour
   end
 
-  def calculate_each_user_total_for_one_hour(current_odds)
+  def calculate_each_user_total_for_one_hour
     current_standings = @racecars.sort{ |a,b| b.total_distance <=> a.total_distance }
     puts "The current winner is #{current_standings[0].name}!"
     @attendees.each do |person|
       if person.current_car_betting_on == current_standings[0]
-        person.winnings += (person.current_bet_amount * current_odds)
+        person.winnings += (person.current_bet_amount * current_standings[0].odds_of_winning)
       end
     end
   end
@@ -94,13 +95,14 @@ class RaceTrack
 end
 
 class RaceCar
-  attr_accessor :name, :speed, :total_distance
+  attr_accessor :name, :speed, :total_distance, :odds_of_winning
 
-  def initialize(name)
+  def initialize(name, odds)
   	@name = name
   	@speed = rand(60..80)
   	@total_distance = 0
-  	puts "This car has been initialized with a speed of #{@speed}mph."
+    @odds_of_winning = odds
+  	puts "This car, #{@name}, has been initialized with a speed of #{@speed}mph. Its odds of winning are #{@odds_of_winning}."
   end
 end
 
@@ -126,10 +128,10 @@ end
 
 talledaga = RaceTrack.new('Talledaga SuperSpeedway')
 
-car_a = RaceCar.new("Godaddy Car")
-car_b = RaceCar.new("Michillin Car")
-car_c = RaceCar.new("Penzoil Car")
-car_d = RaceCar.new("Red Racecar")
+car_a = RaceCar.new("Godaddy Car", 0.7)
+car_b = RaceCar.new("Michillin Car", 0.25)
+car_c = RaceCar.new("Penzoil Car", 0.45)
+car_d = RaceCar.new("Red Racecar", 0.35)
 talledaga.add_car(car_a)
 talledaga.add_car(car_b)
 talledaga.add_car(car_c)
